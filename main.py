@@ -3,7 +3,7 @@ import json, utility
 
 app = FastAPI()
 
-# """
+"""
 # USED ON LOCAL HOST
 from fastapi.middleware.cors import CORSMiddleware
 origins = [
@@ -23,7 +23,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# """
+"""
 
 @app.get("/")
 def index():
