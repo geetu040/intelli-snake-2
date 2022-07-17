@@ -164,31 +164,6 @@ class Game {
 			console.log("\n")
 			this.load_automated_infos()
 		});
-
-		// $.ajax({
-		// 	url: '/automate_faster',
-		// 	dataType: 'json',
-		// 	async: true,
-		// 	data: {"data": JSON.stringify(loaded_infos[loaded_infos.length-1])},
-		// 	success: (returned_infos)=>{
-		// 		if (btn_fast_automation.innerText == "Fast Automation") {if(btn_guide.innerText == "Guide"){btn_fast_automation.disabled = false};return}
-		// 		loading.style.setProperty("visibility", "hidden")
-		// 		// adding more infos
-		// 		if (loaded_infos.length < 200 || this.info['overflow_infos']) {loaded_infos = loaded_infos.concat(returned_infos)}
-		// 		console.log("ADDED NEW INFOS")
-		// 		console.table(`infos count: ${loaded_infos.length}`)
-
-		// 		// Finding optimal time for interval
-		// 		let time_f = Date.now()
-		// 		let fast_time = (time_f - time_i)/(this.info.automated_infos_count*mult)
-		// 		if (this.info.automated_time_update_freq) { game.automate_faster(fast_time) }
-		// 		else {if (start_auto == 1) {game.automate_faster(fast_time); start_auto=0;}}
-		// 		console.log(`FAST TIME: ${fast_time}`)
-
-		// 		console.log("\n")
-		// 		this.load_automated_infos()
-		// 	}
-		// });
 	}
 	automate() {
 
@@ -199,20 +174,13 @@ class Game {
 			for (let i=0; i<4; i++) { if (this.move(pred_dirs[i])) { this.info.second_pref_count += i; break } }
 		
 		});
-		// let returned = $.ajax({
-		// 	url: '/automate',
-		// 	dataType: 'json',
-		// 	async: false,
-		// 	data: {"data": JSON.stringify(this.info)},
-		// });
-		// let pred_dirs = JSON.parse(returned['responseText'])  // predicted directions sorted by preference
-		// for (let i=0; i<4; i++) { if (this.move(pred_dirs[i])) { this.info.second_pref_count += i; break } }
 	}
 
 
 
 	get_map(map_type) {
 		// getting the maps
+		loading.style.setProperty("visibility", "visible")
 		this.info.map_type = map_type
 		this.info.steps = 0
 
@@ -220,6 +188,7 @@ class Game {
 		.then(response => response.json())
 		.then(data => {
 			this.info = JSON.parse(data)
+			loading.style.setProperty("visibility", "hidden")
 			this.update_map()
 		});
 	}
@@ -277,14 +246,6 @@ document.onkeydown = (event)=> {
 			content = ''
 			return
 		});
-		// $.ajax({
-		// 	url: '/write',
-		// 	dataType: 'json',
-		// 	async: true,
-		// 	data: {"content": content},
-		// });
-		// content = ''
-		// return
 	}
 	// controls
 	if (event.key == 'ArrowRight') { game.info.cache_dir = 3 }
