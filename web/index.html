@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Intelli Snake 2</title>
+	<link rel="shortcut icon" href="snake.png">
+	<style>
+		:root {
+			--rows: 31;
+			--cols: 28;
+			--win_size: 98vmin;
+		}
+	</style>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+	<div class="container">
+		<div class="sub-container">
+			<div class="top">
+				<div id="score">Score: <span id="score_span">0</span></div>
+				<div id="fouls">Fouls: <span id="fouls_span">0</span></div>
+				<div id="fouls">Steps: <span id="steps_span">0</span></div>
+			</div>
+			<div class="game">
+
+				<div id="loading" class="lds-hourglass"></div>
+				<div id="ins">
+
+					<b class="heading1">Instructions</b> <br>
+					<ul>
+						<li> Use arrow keys
+							<img src="arrows.png" alt="" width="6%">
+							to move the Snake
+						</li>
+						<li> Press Space at any time to pause the game </li>
+						<li> On Touch systems swipe the screen to control movement </li>
+						<li> Help Snake fetch the food and score higher! </li>
+						<li> You can automate the snake to catch food by itself </li>
+						<li> The game is based on the idea: <a href="https://the-fetcher.herokuapp.com/"
+								target="new">The Fetcher</a> </li>
+						<li> Intelli Snake 2 is an efficient version of: <a href="https://intelli-snake.herokuapp.com/"
+								target="new">Intelli Snake</a> </li>
+					</ul> <br>
+
+
+					<b class="heading1">Fouls</b> <br>
+					A foul is commited when the Snake
+					<ul>
+						<li> eats itself </li>
+						<li> hits the wall (collision needs to be enabled) </li>
+						<li> fails to catch food in 60 steps </li>
+					</ul> <br>
+
+
+					<b class="heading1">Automation</b> <br>
+					Two options are available for automation
+					<ul><br>
+						<li> <b> Fast Automation </b>
+							<ul>
+								<li>Snake moves faster than regular</li>
+								<li> An Asynchronous Http request is sent which returns the next
+									50 steps</li>
+								<li>Snake then moves through the loaded steps, meanwhile more requests are sent for more
+									steps</li>
+								<li>Snake moves and requests are sent in parallel</li>
+							</ul>
+						</li> <br>
+						<li> <b> Automate </b>
+							<ul>
+								<li>Snake moves at regular speed</li>
+								<li>At each step a synchronous Http request is sent which returns with the next step
+								</li>
+								<li>Snake waits for a request at each step</li>
+							</ul>
+						</li>
+					</ul>
+
+					<br>
+					<hr><br>
+					<b class="heading1"> AI behind Automation </b> <br>
+					<ul>
+						<li> For automation we have 2 models built on Deep Neural Networks and Convolutianl Neural
+							Networks </li>
+						<li> Both the models are based on keras API, using tensorflow, implementing Functional API and
+							Sequential models. </li>
+						<li> The models return an array of directions sorted by preference </li>
+						<li> Snake then uses the first direction with most preference </li>
+						<li> If the first preferred direction doestnot help, snake uses the next preference</li>
+						<li> Since the Random Model has lesser accuracy, you'll find it commiting more fouls </li>
+					</ul>
+					<br>
+					<ul>
+						<li>
+							<b>Fixed Model</b> <span>[Accuracy: 99.72%]</span> <br>
+							<ul>
+								<li>
+									It takes 2 inputs
+									<ul>
+										<li> Possition of snake and food </li>
+										<li> Available directions </li>
+									</ul>
+								</li>
+								<li> It is based on Functional API and Sequential Models </li>
+								<li> Deep Neural Networks are involved </li>
+							</ul>
+						</li> <br>
+						<li>
+							<b>Random Model</b> <span>[Accuracy: 94.59%]</span> <br>
+							<ul>
+								<li>
+									It takes 3 inputs
+									<ul>
+										<li> Image of the Map </li>
+										<li> Possition of snake and food </li>
+										<li> Available directions </li>
+									</ul>
+								</li>
+								<li> Deep Neural Networks, along with Convolutianl Neural Networks are involved </li>
+								<li> It is based on Functional API, Sequential Model and Transfer Model (using Fixed
+									Model as base) </li>
+								<li> Input 2 and Input 3 are transferred to Fixed Model, the output is then used with
+									Input 1 by Sequential Models and Functional API which then generate a final output
+								</li>
+
+							</ul>
+						</li>
+					</ul>
+
+
+					<br>
+					<hr>
+					To see the summary of models and the complete back end <br>
+					visit: <a href="https://github.com/geetu040/intelli-snake-2" target="new">Github Repository</a>
+
+				</div>
+
+				<!-- {% for y in range(params.rows) %}
+				{% for x in range(params.cols) %}
+				<div class="game-item"></div>
+				{% endfor %}
+				{% endfor %} -->
+
+			</div>
+		</div>
+		<div class="right">
+			<button id="btn_fast_automation">Fast Automation</button>
+			<button id="btn_pause_auto">Automate</button>
+			<button id="btn_next_map">Random Map</button>
+			<button id="btn_speeder">Slower</button>
+			<button id="btn_collide">Enable Collision</button>
+			<button id="btn_replace">Replace Food</button>
+			<button id="btn_guide">Guide</button>
+		</div>
+	</div>
+
+	<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+	<!-- <script type="text/javascript" src="https://livejs.com/live.js"></script> -->
+	<script>
+		rows = 31
+		cols = 28
+		win_size = 98
+
+		for (let i=0; i<rows*cols; i++) {
+			let gameItem = document.createElement("div");
+			gameItem.classList.add("game-item")
+			document.getElementsByClassName("game")[0].appendChild(gameItem);
+		}
+
+	</script>
+	<script src="swipe.js"></script>
+	<script src="script.js"></script>
+</body>
+
+</html>
