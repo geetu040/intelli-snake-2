@@ -1,5 +1,5 @@
 // const API_URL = "http://127.0.0.1:8000/intelli-snake-2/"
-const API_URL = "http://intelli-snake-2-api.herokuapp.com/intelli-snake-2/"
+const API_URL = "https://intelli-snake-2-api.herokuapp.com/intelli-snake-2/"
 
 let loaded_infos = []
 interval_var_fast = 0

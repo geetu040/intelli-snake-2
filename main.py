@@ -3,18 +3,11 @@ import json, utility
 
 app = FastAPI()
 
-"""
-# USED ON LOCAL HOST
+# ADDING ORIGINS
 from fastapi.middleware.cors import CORSMiddleware
 origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:3000",
-    "http://192.168.1.108:3000",
-    "http://localhost:8080",
-    "http://127.0.0.1:8000",
-    "http://127.0.0.1:5500",
+    "http://127.0.0.1:5500",        # local host
+    "https://geetu040.github.io",   # where app is hosted
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -23,7 +16,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-"""
 
 @app.get("/")
 def index():
